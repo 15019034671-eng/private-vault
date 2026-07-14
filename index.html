@@ -279,36 +279,23 @@ async function uploadToCloud() {
   return { skipped: false, message: '☁️ 已同步到云端' };
 }
 
-async function downloadFromCloud(passwordOverride) {
+async function downloadFromCloud() {
   const resp = await fetch(RAW_URL, { cache: 'no-cache' });
   if (!resp.ok) {
-    if (resp.status === 404) throw new Error('云端还没有数据，请先上传');
+    if (resp.status === 404) throw new Error('云端还没有数据，请先在电脑上点击「上传到云端」');
     throw new Error(`下载失败 (${resp.status})`);
   }
 
   const cloudBlob = (await resp.text()).trim();
-
-  // 对比本地是否一样
   const localBlob = getEncryptedBlob();
-  if (localBlob === cloudBlob && !passwordOverride) {
+
+  if (localBlob === cloudBlob) {
     cloudSynced = true;
-    return { skipped: true, message: '本地已是最新，无需下载' };
+    return { skipped: true, cloudBlob };
   }
 
-  // 尝试解密
-  const tryPassword = passwordOverride || currentPassword;
-  if (tryPassword) {
-    try {
-      const json = await decryptData(tryPassword, cloudBlob);
-      const cloudEntries = JSON.parse(json);
-      if (!Array.isArray(cloudEntries)) throw new Error('格式错误');
-      return { skipped: false, cloudBlob, cloudEntries, message: '✅ 已从云端下载' };
-    } catch(e) {
-      throw new Error('password_mismatch');
-    }
-  }
-
-  return { skipped: false, cloudBlob, message: '✅ 已从云端下载' };
+  // 不在此处解密——直接保存密文，让解锁流程处理密码验证
+  return { skipped: false, cloudBlob };
 }
 
 // ===== UI =====
@@ -373,17 +360,13 @@ async function handlePullFromCloud() {
   try {
     const result = await downloadFromCloud();
     if (result.skipped) {
-      showToast('ℹ️ ' + result.message);
+      showToast('ℹ️ 本地已是最新');
     } else {
       saveEncryptedBlob(result.cloudBlob);
       showToast('✅ 已从云端拉取，请输入密码解锁');
     }
   } catch(e) {
     showToast('❌ ' + e.message);
-    // 如果没有 token，提示设置
-    if (!getToken()) {
-      setTimeout(() => openTokenSetup(), 500);
-    }
   } finally {
     btn.disabled = false;
     btn.textContent = '☁️ 从云端拉取';
@@ -575,106 +558,21 @@ async function handleCloudDownload() {
   try {
     const result = await downloadFromCloud();
     if (result.skipped) {
-      showToast('ℹ️ ' + result.message);
-    } else if (result.cloudEntries) {
-      // 合并策略：云端覆盖本地同 id，新增云端独有的
-      const existingIds = new Set(entries.map(e => e.id));
-      for (const item of result.cloudEntries) {
-        if (existingIds.has(item.id)) {
-          const idx = entries.findIndex(e => e.id === item.id);
-          if (item.updatedAt > entries[idx].updatedAt) entries[idx] = item;
-        } else {
-          entries.push(item);
-        }
-      }
-      dirty = true;
-      await encryptAndSave();
-      cloudSynced = true;
-      renderMain();
-      showToast(`✅ 已同步 ${result.cloudEntries.length} 条记录`);
+      showToast('ℹ️ 本地已是最新');
     } else {
-      // 还没解锁但下载了 blob
+      // 直接保存云端密文到本地
       saveEncryptedBlob(result.cloudBlob);
-      showToast('✅ 已下载，请输入密码解锁');
+      cloudSynced = true;
+      showToast('✅ 已下载，请锁定后用云端密码重新解锁');
+      // 3秒后自动锁定
+      setTimeout(() => handleLock(), 2000);
     }
   } catch(e) {
-    if (e.message === 'password_mismatch') {
-      // 当前密码不对，弹窗让用户输入云端密码
-      btn.disabled = false;
-      btn.textContent = '⬇️ 从云端下载';
-      askCloudPassword();
-      return;
-    }
     showToast('❌ ' + e.message);
   } finally {
     btn.disabled = false;
     btn.textContent = '⬇️ 从云端下载';
   }
-}
-
-function askCloudPassword() {
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `
-    <div class="modal">
-      <h2>🔐 请输入云端数据的密码</h2>
-      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">
-        当前密码与云端数据不匹配。请输入你<b>另一台设备</b>上设置的密码。
-      </p>
-      <label>云端密码</label>
-      <input type="password" id="cloudPwInput" placeholder="输入另一台设备的密码…" autofocus>
-      <div class="btn-group">
-        <button class="btn btn-small" id="cancelCloudPw" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">取消</button>
-        <button class="btn btn-primary btn-small" id="confirmCloudPw">确认下载</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-
-  const close = () => overlay.remove();
-  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-  document.getElementById('cancelCloudPw').addEventListener('click', close);
-
-  document.getElementById('confirmCloudPw').addEventListener('click', async () => {
-    const pw = document.getElementById('cloudPwInput').value;
-    if (!pw) { showToast('⚠️ 请输入密码'); return; }
-
-    try {
-      const result = await downloadFromCloud(pw);
-      if (result.cloudEntries) {
-        // 合并
-        const existingIds = new Set(entries.map(e => e.id));
-        for (const item of result.cloudEntries) {
-          if (existingIds.has(item.id)) {
-            const idx = entries.findIndex(e => e.id === item.id);
-            if (item.updatedAt > entries[idx].updatedAt) entries[idx] = item;
-          } else {
-            entries.push(item);
-          }
-        }
-        // 更新当前密码为云端密码
-        currentPassword = pw;
-        dirty = true;
-        await encryptAndSave();
-        cloudSynced = true;
-        close();
-        renderMain();
-        showToast(`✅ 已同步 ${result.cloudEntries.length} 条记录，密码已更新`);
-      } else {
-        saveEncryptedBlob(result.cloudBlob);
-        currentPassword = pw;
-        close();
-        renderMain();
-        showToast('✅ 已下载，密码已更新');
-      }
-    } catch(e2) {
-      showToast('❌ 密码错误，请重试');
-    }
-  });
-
-  document.getElementById('cloudPwInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById('confirmCloudPw').click();
-  });
 }
 
 // ===== 编辑器 =====
