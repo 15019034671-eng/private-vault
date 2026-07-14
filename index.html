@@ -29,166 +29,100 @@
     justify-content: center;
     padding: 20px;
   }
-  .container {
-    width: 100%;
-    max-width: 640px;
-  }
+  .container { width: 100%; max-width: 640px; }
   .card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 32px;
   }
-  h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .subtitle {
-    color: var(--muted);
-    font-size: 0.875rem;
-    margin-bottom: 24px;
-  }
+  h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  .subtitle { color: var(--muted); font-size: 0.875rem; margin-bottom: 24px; }
   label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
+    display: block; font-size: 0.8rem; font-weight: 600;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
   }
   input[type="password"], textarea, input[type="text"] {
-    width: 100%;
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-    color: var(--text);
-    font-size: 0.95rem;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; background: var(--input-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; color: var(--text);
+    font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s;
   }
   input:focus, textarea:focus { border-color: var(--accent); }
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-    line-height: 1.5;
-  }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
   .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 20px; border: none; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit;
   }
   .btn-primary { background: var(--accent); color: #fff; width: 100%; }
   .btn-primary:hover { background: var(--accent-hover); }
   .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
   .btn-danger:hover { background: var(--danger); color: #fff; }
   .btn-small { padding: 6px 14px; font-size: 0.8rem; }
+  .btn-wide { width: 100%; padding: 8px 16px; font-size: 0.85rem; }
   .btn-group { display: flex; gap: 8px; margin-top: 16px; }
   .btn-group .btn { flex: 1; }
 
   .hidden { display: none !important; }
 
   .status-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 20px;
-    font-size: 0.8rem;
-    color: var(--muted);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    margin-bottom: 20px; font-size: 0.8rem; color: var(--muted);
   }
   .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 6px;
+    width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px;
   }
   .status-dot.saved { background: var(--success); }
   .status-dot.unsaved { background: #f39c12; animation: pulse 1.5s infinite; }
+  .status-dot.cloud { background: #3498db; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   .entry {
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
+    background: var(--input-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; margin-bottom: 10px;
+    cursor: pointer; transition: all 0.2s;
   }
   .entry:hover { border-color: var(--accent); }
-  .entry-title {
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin-bottom: 4px;
-  }
-  .entry-preview {
-    font-size: 0.8rem;
-    color: var(--muted);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .entry-meta {
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-top: 6px;
-    display: flex;
-    gap: 12px;
-  }
+  .entry-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+  .entry-preview { font-size: 0.8rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .entry-meta { font-size: 0.7rem; color: var(--muted); margin-top: 6px; display: flex; gap: 12px; }
 
   .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 100;
-    padding: 20px;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
   }
   .modal {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    width: 100%;
-    max-width: 520px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; width: 100%; max-width: 520px;
   }
   .modal h2 { font-size: 1.1rem; margin-bottom: 16px; }
 
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--muted);
-  }
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
   .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+
+  .sync-section {
+    background: var(--input-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; margin-top: 16px;
+  }
+  .sync-section h3 { font-size: 0.9rem; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .sync-section .status { font-size: 0.75rem; color: var(--muted); margin-top: 8px; text-align: center; }
+
   .toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: var(--accent);
-    color: #fff;
-    padding: 10px 24px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    z-index: 200;
-    opacity: 0;
-    transition: opacity 0.3s;
+    background: var(--accent); color: #fff; padding: 10px 24px;
+    border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+    z-index: 200; opacity: 0; transition: opacity 0.3s; pointer-events: none;
   }
   .toast.show { opacity: 1; }
+
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 0.7rem; font-weight: 600;
+  }
+  .badge-synced { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .badge-local { background: rgba(243,156,18,0.2); color: #f39c12; }
 </style>
 </head>
 <body>
@@ -208,11 +142,21 @@ async function deriveKey(password, salt) {
   const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
   return crypto.subtle.deriveKey(
     { name: 'PBKDF2', salt, iterations: ITERATIONS, hash: 'SHA-256' },
-    baseKey,
-    { name: 'AES-GCM', length: 256 },
-    false,
-    ['encrypt', 'decrypt']
+    baseKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
   );
+}
+
+function arrayToBase64(arr) {
+  let binary = '';
+  for (let i = 0; i < arr.length; i++) binary += String.fromCharCode(arr[i]);
+  return btoa(binary);
+}
+
+function base64ToArray(b64) {
+  const binary = atob(b64);
+  const arr = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+  return arr;
 }
 
 async function encryptData(password, plaintext) {
@@ -221,30 +165,45 @@ async function encryptData(password, plaintext) {
   const key = await deriveKey(password, salt);
   const enc = new TextEncoder();
   const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
-
-  // 打包: version(1) + salt(16) + iv(12) + ciphertext
   const packed = new Uint8Array(1 + SALT_LENGTH + IV_LENGTH + ciphertext.byteLength);
   packed[0] = VERSION;
   packed.set(salt, 1);
   packed.set(iv, 1 + SALT_LENGTH);
   packed.set(new Uint8Array(ciphertext), 1 + SALT_LENGTH + IV_LENGTH);
-
-  return btoa(String.fromCharCode(...packed));
+  return arrayToBase64(packed);
 }
 
 async function decryptData(password, base64Data) {
-  const packed = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+  const packed = base64ToArray(base64Data);
   const version = packed[0];
   if (version !== VERSION) throw new Error('数据版本不兼容');
-
   const salt = packed.slice(1, 1 + SALT_LENGTH);
   const iv = packed.slice(1 + SALT_LENGTH, 1 + SALT_LENGTH + IV_LENGTH);
   const ciphertext = packed.slice(1 + SALT_LENGTH + IV_LENGTH);
-
   const key = await deriveKey(password, salt);
   const dec = new TextDecoder();
   const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
   return dec.decode(plaintext);
+}
+
+// ===== 云同步配置 =====
+const REPO_OWNER = '15019034671-eng';
+const REPO_NAME = 'private-vault';
+const VAULT_FILE = 'vault.data';
+const RAW_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${VAULT_FILE}`;
+const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${VAULT_FILE}`;
+
+function getToken() {
+  return localStorage.getItem('pvault_github_token');
+}
+function setToken(t) {
+  localStorage.setItem('pvault_github_token', t);
+}
+function getCloudMeta() {
+  try { return JSON.parse(localStorage.getItem('pvault_cloud_meta') || '{}'); } catch(e) { return {}; }
+}
+function setCloudMeta(m) {
+  localStorage.setItem('pvault_cloud_meta', JSON.stringify(m));
 }
 
 // ===== 数据管理 =====
@@ -252,16 +211,15 @@ const STORAGE_KEY = 'pvault_encrypted_data';
 let currentPassword = null;
 let entries = [];
 let dirty = false;
+let cloudSynced = false;
 
 function getEncryptedBlob() {
   return localStorage.getItem(STORAGE_KEY);
 }
-
 function saveEncryptedBlob(blob) {
   localStorage.setItem(STORAGE_KEY, blob);
   dirty = false;
 }
-
 async function loadAndDecrypt(password) {
   const blob = getEncryptedBlob();
   if (!blob) { entries = []; return; }
@@ -269,21 +227,97 @@ async function loadAndDecrypt(password) {
   entries = JSON.parse(json);
   if (!Array.isArray(entries)) throw new Error('数据格式错误');
 }
-
 async function encryptAndSave() {
   const json = JSON.stringify(entries);
   const blob = await encryptData(currentPassword, json);
   saveEncryptedBlob(blob);
 }
 
-// ===== UI 渲染 =====
+// ===== 云同步操作 =====
+async function uploadToCloud() {
+  const token = getToken();
+  if (!token) throw new Error('no_token');
+
+  const blob = getEncryptedBlob();
+  if (!blob) throw new Error('no_data');
+
+  // 先检查文件是否存在（获取 sha）
+  let sha = null;
+  try {
+    const resp = await fetch(API_URL, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      sha = data.sha;
+      // 如果云端内容和本地一样，跳过
+      if (data.content && data.content.replace(/\n/g, '') === blob) {
+        return { skipped: true, message: '云端已是最新，无需上传' };
+      }
+    }
+  } catch(e) {}
+
+  const body = { message: 'Update vault data', content: blob, branch: 'main' };
+  if (sha) body.sha = sha;
+
+  const resp = await fetch(API_URL, {
+    method: 'PUT',
+    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.message || `上传失败 (${resp.status})`);
+  }
+
+  const result = await resp.json();
+  const now = Date.now();
+  setCloudMeta({ uploadedAt: now, sha: result.content?.sha });
+  cloudSynced = true;
+
+  return { skipped: false, message: '☁️ 已同步到云端' };
+}
+
+async function downloadFromCloud() {
+  const resp = await fetch(RAW_URL, { cache: 'no-cache' });
+  if (!resp.ok) {
+    if (resp.status === 404) throw new Error('云端还没有数据，请先上传');
+    throw new Error(`下载失败 (${resp.status})`);
+  }
+
+  const cloudBlob = (await resp.text()).trim();
+
+  // 对比本地是否一样
+  const localBlob = getEncryptedBlob();
+  if (localBlob === cloudBlob) {
+    cloudSynced = true;
+    return { skipped: true, message: '本地已是最新，无需下载' };
+  }
+
+  // 先尝试用当前密码解密验证
+  if (currentPassword) {
+    try {
+      const json = await decryptData(currentPassword, cloudBlob);
+      const cloudEntries = JSON.parse(json);
+      if (!Array.isArray(cloudEntries)) throw new Error('格式错误');
+      return { skipped: false, cloudBlob, cloudEntries, message: '✅ 已从云端下载' };
+    } catch(e) {
+      throw new Error('云端数据密码不匹配，无法解密');
+    }
+  }
+
+  return { skipped: false, cloudBlob, message: '✅ 已从云端下载' };
+}
+
+// ===== UI =====
 const app = document.getElementById('app');
 const toast = document.getElementById('toast');
 
 function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2000);
+  setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
 function formatDate(ts) {
@@ -296,26 +330,63 @@ function formatDate(ts) {
   return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
+}
+
+// ===== 锁定页 =====
 function renderLockScreen() {
+  const meta = getCloudMeta();
+  const cloudInfo = meta.uploadedAt
+    ? `<div style="margin-top:8px;font-size:0.75rem;color:var(--muted);text-align:center;">☁️ 云端有备份 · ${formatDate(meta.uploadedAt)}</div>`
+    : '';
+
   app.innerHTML = `
     <div class="card">
       <h1>🔐 私人资料保险库</h1>
-      <p class="subtitle">所有数据使用 AES-256-GCM 加密存储，只有输入正确密码才能解锁。</p>
+      <p class="subtitle">AES-256-GCM 军事级加密 · 支持 GitHub 云同步</p>
       <label>请输入密码</label>
       <input type="password" id="passwordInput" placeholder="输入你的保险库密码…" autofocus>
       <div style="margin-top:16px;">
         <button class="btn btn-primary" id="unlockBtn">🔓 解锁</button>
       </div>
-      <div style="margin-top:12px; font-size:0.75rem; color:var(--muted); text-align:center;">
-        还没有资料？输入新密码后会自动创建保险库。
+      ${cloudInfo}
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button class="btn btn-small" id="fromCloudBtn" style="flex:1; background:var(--input-bg); color:var(--text); border:1px solid var(--border);">☁️ 从云端拉取</button>
       </div>
     </div>
   `;
 
   document.getElementById('unlockBtn').addEventListener('click', handleUnlock);
-  document.getElementById('passwordInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') handleUnlock();
-  });
+  document.getElementById('passwordInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleUnlock(); });
+  document.getElementById('fromCloudBtn').addEventListener('click', handlePullFromCloud);
+}
+
+async function handlePullFromCloud() {
+  const btn = document.getElementById('fromCloudBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ 下载中…';
+
+  try {
+    const result = await downloadFromCloud();
+    if (result.skipped) {
+      showToast('ℹ️ ' + result.message);
+    } else {
+      saveEncryptedBlob(result.cloudBlob);
+      showToast('✅ 已从云端拉取，请输入密码解锁');
+    }
+  } catch(e) {
+    showToast('❌ ' + e.message);
+    // 如果没有 token，提示设置
+    if (!getToken()) {
+      setTimeout(() => openTokenSetup(), 500);
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '☁️ 从云端拉取';
+  }
 }
 
 async function handleUnlock() {
@@ -335,6 +406,11 @@ async function handleUnlock() {
     }
     currentPassword = pw;
     dirty = false;
+
+    // 检查云端状态
+    const meta = getCloudMeta();
+    cloudSynced = !!meta.uploadedAt;
+
     renderMain();
   } catch (e) {
     console.error(e);
@@ -345,21 +421,28 @@ async function handleUnlock() {
   }
 }
 
+// ===== 主界面 =====
 function renderMain() {
   const sorted = [...entries].sort((a, b) => b.updatedAt - a.updatedAt);
+  const meta = getCloudMeta();
+  const hasToken = !!getToken();
+
+  const cloudStatus = meta.uploadedAt
+    ? `<span class="badge badge-synced">☁️ 已同步 · ${formatDate(meta.uploadedAt)}</span>`
+    : '<span class="badge badge-local">📱 仅本地</span>';
 
   app.innerHTML = `
     <div class="card">
       <div class="status-bar">
         <span><span class="status-dot ${dirty ? 'unsaved' : 'saved'}"></span>${dirty ? '有未保存的更改' : '已加密保存'}</span>
-        <span>${entries.length} 条记录</span>
+        <span>${entries.length} 条记录 &nbsp; ${cloudStatus}</span>
       </div>
       <h1>🔐 我的资料库</h1>
       <p class="subtitle">所有内容在本地加密，关闭页面后自动锁定。</p>
 
-      <div style="display:flex; gap:8px; margin-bottom:20px;">
+      <div style="display:flex; gap:8px; margin-bottom:8px;">
         <button class="btn btn-primary" id="addBtn" style="flex:1;">➕ 新建资料</button>
-        <button class="btn btn-small" id="exportBtn" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">📥 导出备份</button>
+        <button class="btn btn-small" id="exportBtn" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">📥 导出</button>
         <button class="btn btn-small" id="importBtn" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">📤 导入</button>
       </div>
 
@@ -382,7 +465,21 @@ function renderMain() {
         `).join('')}
       </div>
 
-      <div style="margin-top:20px; display:flex; gap:8px;">
+      <!-- 云同步 -->
+      <div class="sync-section">
+        <h3>☁️ 云端同步 <span style="font-size:0.7rem;font-weight:400;color:var(--muted);">（所有设备共享数据）</span></h3>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-wide" id="cloudUploadBtn" style="background:var(--accent); color:#fff; flex:1;">⬆️ 上传到云端</button>
+          <button class="btn btn-wide" id="cloudDownloadBtn" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border); flex:1;">⬇️ 从云端下载</button>
+        </div>
+        <div class="status" id="cloudStatus">
+          ${hasToken
+            ? (meta.uploadedAt ? `✅ 已配置 · 最近同步：${formatDate(meta.uploadedAt)}` : '✅ 已配置 · 点击上传开始同步')
+            : '⚠️ 未配置 Token · <a href="#" id="setupTokenLink" style="color:var(--accent);">点击设置</a>'}
+        </div>
+      </div>
+
+      <div style="margin-top:12px; display:flex; gap:8px;">
         <button class="btn btn-danger btn-small" id="lockBtn">🔒 锁定</button>
         <button class="btn btn-danger btn-small" id="changePwBtn">🔑 修改密码</button>
       </div>
@@ -395,23 +492,118 @@ function renderMain() {
   document.getElementById('importBtn').addEventListener('click', handleImport);
   document.getElementById('lockBtn').addEventListener('click', handleLock);
   document.getElementById('changePwBtn').addEventListener('click', openChangePassword);
+  document.getElementById('cloudUploadBtn').addEventListener('click', handleCloudUpload);
+  document.getElementById('cloudDownloadBtn').addEventListener('click', handleCloudDownload);
+
+  const tokenLink = document.getElementById('setupTokenLink');
+  if (tokenLink) tokenLink.addEventListener('click', (e) => { e.preventDefault(); openTokenSetup(); });
 
   document.querySelectorAll('.entry').forEach(el => {
     el.addEventListener('click', () => {
-      const id = el.dataset.id;
-      const entry = entries.find(e => e.id === id);
+      const entry = entries.find(e => e.id === el.dataset.id);
       if (entry) openEditor(entry);
     });
   });
 }
 
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+// ===== Token 设置 =====
+function openTokenSetup() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal">
+      <h2>🔑 设置 GitHub Token</h2>
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">
+        需要 GitHub Personal Access Token 才能上传数据到云端。<br>
+        去 <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--accent);">github.com/settings/tokens</a> 创建一个，勾选 <b>repo</b> 权限即可。
+      </p>
+      <label>GitHub Token</label>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" value="${escapeHtml(getToken() || '')}">
+      <div class="btn-group">
+        <button class="btn btn-small" id="cancelToken" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">取消</button>
+        <button class="btn btn-primary btn-small" id="saveToken">保存</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const close = () => { overlay.remove(); renderMain(); };
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.getElementById('cancelToken').addEventListener('click', close);
+  document.getElementById('saveToken').addEventListener('click', () => {
+    const t = document.getElementById('tokenInput').value.trim();
+    if (t) {
+      setToken(t);
+      showToast('✅ Token 已保存');
+    } else {
+      localStorage.removeItem('pvault_github_token');
+      showToast('Token 已清除');
+    }
+    close();
+  });
 }
 
-// ===== 编辑器弹窗 =====
+// ===== 云上传 / 下载 =====
+async function handleCloudUpload() {
+  if (!getToken()) { openTokenSetup(); return; }
+  if (dirty) { await encryptAndSave(); }
+
+  const btn = document.getElementById('cloudUploadBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ 上传中…';
+
+  try {
+    const result = await uploadToCloud();
+    showToast(result.message);
+    renderMain();
+  } catch(e) {
+    if (e.message === 'no_token') { openTokenSetup(); }
+    else if (e.message === 'no_data') { showToast('⚠️ 请先添加资料再上传'); }
+    else { showToast('❌ ' + e.message); }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⬆️ 上传到云端';
+  }
+}
+
+async function handleCloudDownload() {
+  const btn = document.getElementById('cloudDownloadBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ 下载中…';
+
+  try {
+    const result = await downloadFromCloud();
+    if (result.skipped) {
+      showToast('ℹ️ ' + result.message);
+    } else if (result.cloudEntries) {
+      // 合并策略：云端覆盖本地同 id，新增云端独有的
+      const existingIds = new Set(entries.map(e => e.id));
+      for (const item of result.cloudEntries) {
+        if (existingIds.has(item.id)) {
+          const idx = entries.findIndex(e => e.id === item.id);
+          if (item.updatedAt > entries[idx].updatedAt) entries[idx] = item;
+        } else {
+          entries.push(item);
+        }
+      }
+      dirty = true;
+      await encryptAndSave();
+      cloudSynced = true;
+      renderMain();
+      showToast(`✅ 已同步 ${result.cloudEntries.length} 条记录`);
+    } else {
+      // 还没解锁但下载了 blob
+      showToast('✅ 已下载，锁定后重新解锁生效');
+    }
+  } catch(e) {
+    showToast('❌ ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⬇️ 从云端下载';
+  }
+}
+
+// ===== 编辑器 =====
 function openEditor(entry) {
   const isNew = !entry;
   const overlay = document.createElement('div');
@@ -435,7 +627,6 @@ function openEditor(entry) {
   document.body.appendChild(overlay);
 
   const close = () => overlay.remove();
-
   overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
   document.getElementById('cancelEdit').addEventListener('click', close);
 
@@ -450,43 +641,33 @@ function openEditor(entry) {
 
     if (isNew) {
       entries.push({
-        id: crypto.randomUUID(),
-        title: title || '无标题',
-        tags,
-        content,
-        createdAt: now,
-        updatedAt: now
+        id: crypto.randomUUID(), title: title || '无标题', tags, content,
+        createdAt: now, updatedAt: now
       });
     } else {
       const target = entries.find(e => e.id === entry.id);
       if (target) {
         target.title = title || '无标题';
-        target.tags = tags;
-        target.content = content;
-        target.updatedAt = now;
+        target.tags = tags; target.content = content; target.updatedAt = now;
       }
     }
     dirty = true;
     close();
     autoSave();
     renderMain();
-    showToast('✅ 资料已暂存（需手动锁定或自动保存来加密持久化）');
+    showToast('✅ 已保存');
   });
 
   if (!isNew) {
     document.getElementById('deleteEntry').addEventListener('click', () => {
       if (confirm('确定要删除这条资料吗？此操作不可撤销。')) {
         entries = entries.filter(e => e.id !== entry.id);
-        dirty = true;
-        close();
-        autoSave();
-        renderMain();
+        dirty = true; close(); autoSave(); renderMain();
         showToast('🗑 已删除');
       }
     });
   }
 
-  // 自动聚焦
   setTimeout(() => (document.getElementById('editTitle') || document.getElementById('editContent')).focus(), 100);
 }
 
@@ -509,13 +690,12 @@ async function handleExport() {
   a.href = 'data:text/plain;base64,' + blob;
   a.download = `private-vault-backup-${new Date().toISOString().slice(0,10)}.pvault`;
   a.click();
-  showToast('📥 备份已导出（.pvault 文件）');
+  showToast('📥 备份已导出');
 }
 
 function handleImport() {
   const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.pvault,.txt';
+  input.type = 'file'; input.accept = '.pvault,.txt';
   input.addEventListener('change', async () => {
     const file = input.files[0];
     if (!file) return;
@@ -528,24 +708,16 @@ function handleImport() {
         const json = await decryptData(pw, base64Data);
         const imported = JSON.parse(json);
         if (!Array.isArray(imported)) throw new Error('格式错误');
-        const count = imported.length;
-        // 合并：用 id 去重，新的覆盖旧的
         const existingIds = new Set(entries.map(e => e.id));
         for (const item of imported) {
           if (existingIds.has(item.id)) {
             const idx = entries.findIndex(e => e.id === item.id);
             entries[idx] = item;
-          } else {
-            entries.push(item);
-          }
+          } else { entries.push(item); }
         }
-        dirty = true;
-        await encryptAndSave();
-        renderMain();
-        showToast(`✅ 已导入 ${count} 条记录`);
-      } catch (e) {
-        showToast('❌ 密码错误或文件损坏');
-      }
+        dirty = true; await encryptAndSave(); renderMain();
+        showToast(`✅ 已导入 ${imported.length} 条记录`);
+      } catch(e) { showToast('❌ 密码错误或文件损坏'); }
     };
     reader.readAsDataURL(file);
   });
@@ -555,9 +727,7 @@ function handleImport() {
 // ===== 锁定 =====
 async function handleLock() {
   if (dirty) { await encryptAndSave(); }
-  currentPassword = null;
-  entries = [];
-  dirty = false;
+  currentPassword = null; entries = []; dirty = false; cloudSynced = false;
   renderLockScreen();
 }
 
@@ -581,25 +751,19 @@ function openChangePassword() {
     </div>
   `;
   document.body.appendChild(overlay);
-
   const close = () => overlay.remove();
   overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
   document.getElementById('cancelPw').addEventListener('click', close);
-
   document.getElementById('confirmPw').addEventListener('click', async () => {
     const oldPw = document.getElementById('oldPw').value;
     const new1 = document.getElementById('newPw1').value;
     const new2 = document.getElementById('newPw2').value;
-
     if (oldPw !== currentPassword) { showToast('❌ 当前密码错误'); return; }
     if (!new1) { showToast('⚠️ 新密码不能为空'); return; }
     if (new1 !== new2) { showToast('⚠️ 两次密码不一致'); return; }
-
     currentPassword = new1;
     await encryptAndSave();
-    dirty = false;
-    close();
-    renderMain();
+    dirty = false; close(); renderMain();
     showToast('✅ 密码已修改，数据已重新加密');
   });
 }
@@ -607,14 +771,10 @@ function openChangePassword() {
 // ===== 初始化 =====
 renderLockScreen();
 
-// 页面关闭前自动保存
 window.addEventListener('beforeunload', () => {
-  if (dirty && currentPassword) {
-    encryptAndSave();
-  }
+  if (dirty && currentPassword) { encryptAndSave(); }
 });
 
-// Ctrl+S 手动保存
 document.addEventListener('keydown', async e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
