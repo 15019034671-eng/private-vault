@@ -286,7 +286,16 @@ async function downloadFromCloud() {
     throw new Error(`下载失败 (${resp.status})`);
   }
 
-  const cloudBlob = (await resp.text()).trim();
+  // 用二进制方式读取，避免浏览器 UTF-8 编码破坏数据
+  const buf = await resp.arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  let cloudBlob = '';
+  for (let i = 0; i < bytes.length; i++) {
+    cloudBlob += String.fromCharCode(bytes[i]);
+  }
+  // 去除可能的尾部换行
+  cloudBlob = cloudBlob.replace(/[\r\n]+$/, '');
+
   const localBlob = getEncryptedBlob();
 
   if (localBlob === cloudBlob) {
@@ -294,7 +303,6 @@ async function downloadFromCloud() {
     return { skipped: true, cloudBlob };
   }
 
-  // 不在此处解密——直接保存密文，让解锁流程处理密码验证
   return { skipped: false, cloudBlob };
 }
 
