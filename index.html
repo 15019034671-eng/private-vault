@@ -391,6 +391,13 @@ async function handleUnlock() {
   try {
     const blob = getEncryptedBlob();
     if (blob) {
+      // 先检查数据是否损坏（必须是合法 base64）
+      try { atob(blob); } catch(e) {
+        showToast('⚠️ 本地数据已损坏，请先点「从云端拉取」恢复');
+        btn.disabled = false;
+        btn.textContent = '🔓 解锁';
+        return;
+      }
       await loadAndDecrypt(pw);
     } else {
       entries = [];
@@ -398,7 +405,6 @@ async function handleUnlock() {
     currentPassword = pw;
     dirty = false;
 
-    // 检查云端状态
     const meta = getCloudMeta();
     cloudSynced = !!meta.uploadedAt;
 
