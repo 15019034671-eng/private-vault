@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔐 私人资料保险库</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e0e0e8;
+    --muted: #8888a0;
+    --accent: #6c5ce7;
+    --accent-hover: #7d6ff0;
+    --danger: #e74c3c;
+    --danger-hover: #f05a4a;
+    --success: #2ecc71;
+    --input-bg: #12121c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container {
+    width: 100%;
+    max-width: 640px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+  }
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  input[type="password"], textarea, input[type="text"] {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, textarea:focus { border-color: var(--accent); }
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--accent); color: #fff; width: 100%; }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+  .btn-danger:hover { background: var(--danger); color: #fff; }
+  .btn-small { padding: 6px 14px; font-size: 0.8rem; }
+  .btn-group { display: flex; gap: 8px; margin-top: 16px; }
+  .btn-group .btn { flex: 1; }
+
+  .hidden { display: none !important; }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  .status-dot.saved { background: var(--success); }
+  .status-dot.unsaved { background: #f39c12; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .entry {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .entry:hover { border-color: var(--accent); }
+  .entry-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+  .entry-preview {
+    font-size: 0.8rem;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .entry-meta {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 6px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    width: 100%;
+    max-width: 520px;
+  }
+  .modal h2 { font-size: 1.1rem; margin-bottom: 16px; }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="container" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== 加密核心 =====
+const VERSION = 1;
+const SALT_LENGTH = 16;
+const IV_LENGTH = 12;
+const ITERATIONS = 300000;
+
+async function deriveKey(password, salt) {
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: ITERATIONS, hash: 'SHA-256' },
+    baseKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+async function encryptData(password, plaintext) {
+  const salt = crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
+  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
+  const key = await deriveKey(password, salt);
+  const enc = new TextEncoder();
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
+
+  // 打包: version(1) + salt(16) + iv(12) + ciphertext
+  const packed = new Uint8Array(1 + SALT_LENGTH + IV_LENGTH + ciphertext.byteLength);
+  packed[0] = VERSION;
+  packed.set(salt, 1);
+  packed.set(iv, 1 + SALT_LENGTH);
+  packed.set(new Uint8Array(ciphertext), 1 + SALT_LENGTH + IV_LENGTH);
+
+  return btoa(String.fromCharCode(...packed));
+}
+
+async function decryptData(password, base64Data) {
+  const packed = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+  const version = packed[0];
+  if (version !== VERSION) throw new Error('数据版本不兼容');
+
+  const salt = packed.slice(1, 1 + SALT_LENGTH);
+  const iv = packed.slice(1 + SALT_LENGTH, 1 + SALT_LENGTH + IV_LENGTH);
+  const ciphertext = packed.slice(1 + SALT_LENGTH + IV_LENGTH);
+
+  const key = await deriveKey(password, salt);
+  const dec = new TextDecoder();
+  const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+  return dec.decode(plaintext);
+}
+
+// ===== 数据管理 =====
+const STORAGE_KEY = 'pvault_encrypted_data';
+let currentPassword = null;
+let entries = [];
+let dirty = false;
+
+function getEncryptedBlob() {
+  return localStorage.getItem(STORAGE_KEY);
+}
+
+function saveEncryptedBlob(blob) {
+  localStorage.setItem(STORAGE_KEY, blob);
+  dirty = false;
+}
+
+async function loadAndDecrypt(password) {
+  const blob = getEncryptedBlob();
+  if (!blob) { entries = []; return; }
+  const json = await decryptData(password, blob);
+  entries = JSON.parse(json);
+  if (!Array.isArray(entries)) throw new Error('数据格式错误');
+}
+
+async function encryptAndSave() {
+  const json = JSON.stringify(entries);
+  const blob = await encryptData(currentPassword, json);
+  saveEncryptedBlob(blob);
+}
+
+// ===== UI 渲染 =====
+const app = document.getElementById('app');
+const toast = document.getElementById('toast');
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function formatDate(ts) {
+  const d = new Date(ts);
+  const now = new Date();
+  const diff = now - d;
+  if (diff < 60000) return '刚刚';
+  if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前';
+  if (diff < 86400000) return Math.floor(diff / 3600000) + ' 小时前';
+  return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function renderLockScreen() {
+  app.innerHTML = `
+    <div class="card">
+      <h1>🔐 私人资料保险库</h1>
+      <p class="subtitle">所有数据使用 AES-256-GCM 加密存储，只有输入正确密码才能解锁。</p>
+      <label>请输入密码</label>
+      <input type="password" id="passwordInput" placeholder="输入你的保险库密码…" autofocus>
+      <div style="margin-top:16px;">
+        <button class="btn btn-primary" id="unlockBtn">🔓 解锁</button>
+      </div>
+      <div style="margin-top:12px; font-size:0.75rem; color:var(--muted); text-align:center;">
+        还没有资料？输入新密码后会自动创建保险库。
+      </div>
+    </div>
+  `;
+
+  document.getElementById('unlockBtn').addEventListener('click', handleUnlock);
+  document.getElementById('passwordInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleUnlock();
+  });
+}
+
+async function handleUnlock() {
+  const pw = document.getElementById('passwordInput').value;
+  if (!pw) { showToast('⚠️ 请输入密码'); return; }
+
+  const btn = document.getElementById('unlockBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ 解密中…';
+
+  try {
+    const blob = getEncryptedBlob();
+    if (blob) {
+      await loadAndDecrypt(pw);
+    } else {
+      entries = [];
+    }
+    currentPassword = pw;
+    dirty = false;
+    renderMain();
+  } catch (e) {
+    console.error(e);
+    showToast('❌ 密码错误，请重试');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔓 解锁';
+  }
+}
+
+function renderMain() {
+  const sorted = [...entries].sort((a, b) => b.updatedAt - a.updatedAt);
+
+  app.innerHTML = `
+    <div class="card">
+      <div class="status-bar">
+        <span><span class="status-dot ${dirty ? 'unsaved' : 'saved'}"></span>${dirty ? '有未保存的更改' : '已加密保存'}</span>
+        <span>${entries.length} 条记录</span>
+      </div>
+      <h1>🔐 我的资料库</h1>
+      <p class="subtitle">所有内容在本地加密，关闭页面后自动锁定。</p>
+
+      <div style="display:flex; gap:8px; margin-bottom:20px;">
+        <button class="btn btn-primary" id="addBtn" style="flex:1;">➕ 新建资料</button>
+        <button class="btn btn-small" id="exportBtn" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">📥 导出备份</button>
+        <button class="btn btn-small" id="importBtn" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">📤 导入</button>
+      </div>
+
+      <div id="entryList">
+        ${sorted.length === 0 ? `
+          <div class="empty-state">
+            <div class="icon">📝</div>
+            <p>还没有保存任何资料</p>
+            <p style="font-size:0.8rem;">点击「新建资料」开始记录</p>
+          </div>
+        ` : sorted.map(e => `
+          <div class="entry" data-id="${e.id}">
+            <div class="entry-title">${escapeHtml(e.title || '无标题')}</div>
+            <div class="entry-preview">${escapeHtml(e.content || '')}</div>
+            <div class="entry-meta">
+              <span>🕒 ${formatDate(e.updatedAt)}</span>
+              ${e.tags && e.tags.length ? `<span>🏷 ${escapeHtml(e.tags.join(', '))}</span>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div style="margin-top:20px; display:flex; gap:8px;">
+        <button class="btn btn-danger btn-small" id="lockBtn">🔒 锁定</button>
+        <button class="btn btn-danger btn-small" id="changePwBtn">🔑 修改密码</button>
+      </div>
+    </div>
+  `;
+
+  // 事件绑定
+  document.getElementById('addBtn').addEventListener('click', () => openEditor(null));
+  document.getElementById('exportBtn').addEventListener('click', handleExport);
+  document.getElementById('importBtn').addEventListener('click', handleImport);
+  document.getElementById('lockBtn').addEventListener('click', handleLock);
+  document.getElementById('changePwBtn').addEventListener('click', openChangePassword);
+
+  document.querySelectorAll('.entry').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.id;
+      const entry = entries.find(e => e.id === id);
+      if (entry) openEditor(entry);
+    });
+  });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ===== 编辑器弹窗 =====
+function openEditor(entry) {
+  const isNew = !entry;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal">
+      <h2>${isNew ? '新建资料' : '编辑资料'}</h2>
+      <label>标题</label>
+      <input type="text" id="editTitle" placeholder="资料标题…" value="${escapeHtml(entry?.title || '')}">
+      <label style="margin-top:12px;">标签（逗号分隔）</label>
+      <input type="text" id="editTags" placeholder="如：银行,证件,账号" value="${escapeHtml(entry?.tags?.join(', ') || '')}">
+      <label style="margin-top:12px;">内容</label>
+      <textarea id="editContent" rows="6" placeholder="在这里输入你的重要资料…">${escapeHtml(entry?.content || '')}</textarea>
+      <div class="btn-group">
+        <button class="btn btn-small" id="cancelEdit" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">取消</button>
+        ${!isNew ? '<button class="btn btn-small btn-danger" id="deleteEntry">🗑 删除</button>' : ''}
+        <button class="btn btn-primary btn-small" id="saveEdit">💾 保存</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const close = () => overlay.remove();
+
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.getElementById('cancelEdit').addEventListener('click', close);
+
+  document.getElementById('saveEdit').addEventListener('click', () => {
+    const title = document.getElementById('editTitle').value.trim();
+    const tagsStr = document.getElementById('editTags').value.trim();
+    const content = document.getElementById('editContent').value.trim();
+    if (!title && !content) { showToast('⚠️ 标题和内容至少填一个'); return; }
+
+    const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+    const now = Date.now();
+
+    if (isNew) {
+      entries.push({
+        id: crypto.randomUUID(),
+        title: title || '无标题',
+        tags,
+        content,
+        createdAt: now,
+        updatedAt: now
+      });
+    } else {
+      const target = entries.find(e => e.id === entry.id);
+      if (target) {
+        target.title = title || '无标题';
+        target.tags = tags;
+        target.content = content;
+        target.updatedAt = now;
+      }
+    }
+    dirty = true;
+    close();
+    autoSave();
+    renderMain();
+    showToast('✅ 资料已暂存（需手动锁定或自动保存来加密持久化）');
+  });
+
+  if (!isNew) {
+    document.getElementById('deleteEntry').addEventListener('click', () => {
+      if (confirm('确定要删除这条资料吗？此操作不可撤销。')) {
+        entries = entries.filter(e => e.id !== entry.id);
+        dirty = true;
+        close();
+        autoSave();
+        renderMain();
+        showToast('🗑 已删除');
+      }
+    });
+  }
+
+  // 自动聚焦
+  setTimeout(() => (document.getElementById('editTitle') || document.getElementById('editContent')).focus(), 100);
+}
+
+// ===== 自动保存 =====
+let autoSaveTimer = null;
+function autoSave() {
+  if (!dirty) return;
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(async () => {
+    await encryptAndSave();
+    renderMain();
+  }, 1500);
+}
+
+// ===== 导出 / 导入 =====
+async function handleExport() {
+  if (dirty) { await encryptAndSave(); dirty = false; }
+  const blob = getEncryptedBlob();
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;base64,' + blob;
+  a.download = `private-vault-backup-${new Date().toISOString().slice(0,10)}.pvault`;
+  a.click();
+  showToast('📥 备份已导出（.pvault 文件）');
+}
+
+function handleImport() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.pvault,.txt';
+  input.addEventListener('change', async () => {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64Data = reader.result.split(',')[1] || reader.result;
+      const pw = prompt('请输入该备份文件的密码以验证：');
+      if (!pw) return;
+      try {
+        const json = await decryptData(pw, base64Data);
+        const imported = JSON.parse(json);
+        if (!Array.isArray(imported)) throw new Error('格式错误');
+        const count = imported.length;
+        // 合并：用 id 去重，新的覆盖旧的
+        const existingIds = new Set(entries.map(e => e.id));
+        for (const item of imported) {
+          if (existingIds.has(item.id)) {
+            const idx = entries.findIndex(e => e.id === item.id);
+            entries[idx] = item;
+          } else {
+            entries.push(item);
+          }
+        }
+        dirty = true;
+        await encryptAndSave();
+        renderMain();
+        showToast(`✅ 已导入 ${count} 条记录`);
+      } catch (e) {
+        showToast('❌ 密码错误或文件损坏');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.click();
+}
+
+// ===== 锁定 =====
+async function handleLock() {
+  if (dirty) { await encryptAndSave(); }
+  currentPassword = null;
+  entries = [];
+  dirty = false;
+  renderLockScreen();
+}
+
+// ===== 修改密码 =====
+function openChangePassword() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal">
+      <h2>🔑 修改密码</h2>
+      <label>当前密码</label>
+      <input type="password" id="oldPw" placeholder="输入当前密码">
+      <label style="margin-top:12px;">新密码</label>
+      <input type="password" id="newPw1" placeholder="输入新密码">
+      <label style="margin-top:12px;">确认新密码</label>
+      <input type="password" id="newPw2" placeholder="再次输入新密码">
+      <div class="btn-group">
+        <button class="btn btn-small" id="cancelPw" style="background:var(--input-bg); color:var(--text); border:1px solid var(--border);">取消</button>
+        <button class="btn btn-primary btn-small" id="confirmPw">确认修改</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const close = () => overlay.remove();
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.getElementById('cancelPw').addEventListener('click', close);
+
+  document.getElementById('confirmPw').addEventListener('click', async () => {
+    const oldPw = document.getElementById('oldPw').value;
+    const new1 = document.getElementById('newPw1').value;
+    const new2 = document.getElementById('newPw2').value;
+
+    if (oldPw !== currentPassword) { showToast('❌ 当前密码错误'); return; }
+    if (!new1) { showToast('⚠️ 新密码不能为空'); return; }
+    if (new1 !== new2) { showToast('⚠️ 两次密码不一致'); return; }
+
+    currentPassword = new1;
+    await encryptAndSave();
+    dirty = false;
+    close();
+    renderMain();
+    showToast('✅ 密码已修改，数据已重新加密');
+  });
+}
+
+// ===== 初始化 =====
+renderLockScreen();
+
+// 页面关闭前自动保存
+window.addEventListener('beforeunload', () => {
+  if (dirty && currentPassword) {
+    encryptAndSave();
+  }
+});
+
+// Ctrl+S 手动保存
+document.addEventListener('keydown', async e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    if (currentPassword && dirty) {
+      await encryptAndSave();
+      renderMain();
+      showToast('💾 已加密保存');
+    }
+  }
+});
+</script>
+</body>
+</html>
