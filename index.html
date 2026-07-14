@@ -286,18 +286,17 @@ async function downloadFromCloud() {
     throw new Error(`下载失败 (${resp.status})`);
   }
 
-  // 用二进制方式读取，避免浏览器 UTF-8 编码破坏数据
+  // raw.githubusercontent.com 返回的是原始二进制（GitHub 把 base64 解码后存储的）
+  // 需要重新编码为 base64，才能和 localStorage 中存的格式一致
   const buf = await resp.arrayBuffer();
   const bytes = new Uint8Array(buf);
-  let cloudBlob = '';
+  let binary = '';
   for (let i = 0; i < bytes.length; i++) {
-    cloudBlob += String.fromCharCode(bytes[i]);
+    binary += String.fromCharCode(bytes[i]);
   }
-  // 去除可能的尾部换行
-  cloudBlob = cloudBlob.replace(/[\r\n]+$/, '');
+  const cloudBlob = btoa(binary);
 
   const localBlob = getEncryptedBlob();
-
   if (localBlob === cloudBlob) {
     cloudSynced = true;
     return { skipped: true, cloudBlob };
