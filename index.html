@@ -267,6 +267,7 @@ async function uploadToCloud() {
   });
 
   if (!resp.ok) {
+    if (resp.status === 401) throw new Error('bad_token');
     const err = await resp.json().catch(() => ({}));
     throw new Error(err.message || `上传失败 (${resp.status})`);
   }
@@ -555,6 +556,11 @@ async function handleCloudUpload() {
     renderMain();
   } catch(e) {
     if (e.message === 'no_token') { openTokenSetup(); }
+    else if (e.message === 'bad_token') {
+      showToast('❌ Token 无效，请重新设置');
+      localStorage.removeItem('pvault_github_token');
+      setTimeout(() => openTokenSetup(), 1000);
+    }
     else if (e.message === 'no_data') { showToast('⚠️ 请先添加资料再上传'); }
     else { showToast('❌ ' + e.message); }
   } finally {
